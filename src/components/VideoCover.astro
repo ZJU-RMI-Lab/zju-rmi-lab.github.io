@@ -1,0 +1,44 @@
+---
+import { homeCover } from '../data/home';
+import { withBase } from '../lib/paths';
+import '../styles/video-cover.css';
+
+const clips = homeCover.clips.map((clip) => ({
+  ...clip,
+  src: withBase(clip.src),
+  poster: withBase(clip.poster),
+}));
+---
+
+<section
+  class="video-cover"
+  aria-label="Robot locomotion experiments"
+  data-clips={JSON.stringify(clips)}
+>
+  <div class="cover-media">
+    <img
+      class="cover-poster"
+      src={clips[0].poster}
+      alt="A humanoid robot approaching a staircase during a field experiment."
+      width="960"
+      height="540"
+      fetchpriority="high"
+    />
+    <video
+      class="cover-video"
+      muted
+      playsinline
+      preload="none"
+      aria-hidden="true"
+      tabindex="-1"
+      hidden
+    ></video>
+  </div>
+  <p class="cover-mission">{homeCover.mission}</p>
+  <span class="cover-status visually-hidden" role="status"></span>
+</section>
+
+<script>
+  import { initializeVideoCover } from '../lib/video-cover';
+  document.querySelectorAll<HTMLElement>('.video-cover').forEach(initializeVideoCover);
+</script>

@@ -1,0 +1,29 @@
+---
+import type { PersonLink } from '../data/types';
+import ResourceIcon from './ResourceIcon.astro';
+interface Props {
+  name: string;
+  links: PersonLink[];
+}
+const { name, links } = Astro.props;
+---
+
+<div class="person-links" aria-label={`Links for ${name}`}>
+  {links.map((link) =>
+    link.href ? (
+      <a href={link.href} aria-label={`${name}: ${link.label}`} title={link.label}>
+        <ResourceIcon name={link.icon} />
+      </a>
+    ) : (
+      <span
+        class="person-link-placeholder"
+        role="img"
+        aria-disabled="true"
+        aria-label={`${link.label} (sample link)`}
+        title={`${link.label} (sample link)`}
+      >
+        <ResourceIcon name={link.icon} />
+      </span>
+    ),
+  )}
+</div>

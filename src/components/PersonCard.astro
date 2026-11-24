@@ -1,0 +1,38 @@
+---
+import type { Person } from '../data/types';
+import { withBase } from '../lib/paths';
+import PersonLinks from './PersonLinks.astro';
+interface Props {
+  person: Person;
+  variant?: 'faculty' | 'member';
+  yearLabel?: 'Joined' | 'Enrolled';
+}
+const { person, variant = 'member', yearLabel = 'Joined' } = Astro.props;
+---
+
+<article
+  class:list={['person', `person-${variant}`]}
+  data-placeholder={person.isPlaceholder || undefined}
+>
+  <div class="person-portrait">
+    <img
+      src={withBase(person.image || '/images/portrait-placeholder.svg')}
+      alt={person.isPlaceholder || !person.image ? 'Portrait placeholder' : person.name}
+      width="160"
+      height="160"
+      loading="lazy"
+    />
+  </div>
+  <div class="person-copy">
+    <h3>{person.name}</h3>
+    {variant === 'faculty' && person.role && <p class="person-role">{person.role}</p>}
+    {person.bio && <p class="person-bio">{person.bio}</p>}
+    {person.year && (
+      <p class="person-year">
+        {yearLabel} {person.year}
+      </p>
+    )}
+    {person.interests && <p class="person-interests">{person.interests}</p>}
+    <PersonLinks name={person.name} links={person.links} />
+  </div>
+</article>

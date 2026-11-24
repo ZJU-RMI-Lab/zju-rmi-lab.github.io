@@ -1,0 +1,54 @@
+---
+import { navigation } from '../data/site';
+import { withBase } from '../lib/paths';
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="wordmark" href={withBase('/')} aria-label="RMI Lab home">
+      RMI Lab
+    </a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav" hidden>
+      Menu
+    </button>
+    <nav id="site-nav" aria-label="Main navigation">
+      {navigation.map((item) => (
+        <a
+          href={withBase(item.path)}
+          aria-current={
+            path === (withBase(item.path).replace(/\/$/, '') || '/') ? 'page' : undefined
+          }
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+<script>
+  const button = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.querySelector<HTMLElement>('#site-nav');
+  if (button && nav) {
+    button.hidden = false;
+    nav.classList.add('enhanced');
+    const close = () => {
+      button.setAttribute('aria-expanded', 'false');
+      button.textContent = 'Menu';
+      nav.classList.remove('open');
+    };
+    button.addEventListener('click', () => {
+      const open = button.getAttribute('aria-expanded') !== 'true';
+      button.setAttribute('aria-expanded', String(open));
+      button.textContent = open ? 'Close' : 'Menu';
+      nav.classList.toggle('open', open);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && nav.classList.contains('open')) {
+        close();
+        button.focus();
+      }
+    });
+    window.matchMedia('(min-width: 761px)').addEventListener('change', close);
+  }
+</script>

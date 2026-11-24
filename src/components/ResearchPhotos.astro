@@ -1,0 +1,17 @@
+---
+import { photos } from '../data/home';
+import { withBase } from '../lib/paths';
+---
+
+<figure class="research-photos">
+  <div class="photo-pair">
+    {photos.map((photo) => (
+      <a href={photo.href}>
+        <img src={withBase(photo.image)} alt={photo.alt} width="960" height="540" loading="eager" />
+      </a>
+    ))}
+  </div>
+  <figcaption>
+    Humanoid locomotion experiments <a href={photos[0].href}>SSR</a>
+  </figcaption>
+</figure>

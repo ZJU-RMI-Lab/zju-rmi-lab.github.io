@@ -1,0 +1,99 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import PublicationEntry from '../components/PublicationEntry.astro';
+import { publications } from '../data/publications';
+import { research } from '../data/research';
+import { publicationGroupYear } from '../lib/publication-order.mjs';
+const years = [...new Set(publications.map(publicationGroupYear))].sort((a, b) => b - a);
+---
+
+<Layout title="Publications">
+  <PageHeading title="Publications" description="Example entries for the lab’s publication list." />
+  <form class="publication-filters" role="search" hidden>
+    <div class="search-field">
+      <label for="paper-search">Search publications</label>
+      <input
+        id="paper-search"
+        type="search"
+        placeholder="Title, author, year, or keyword"
+        autocomplete="off"
+      />
+    </div>
+    <div class="topic-field">
+      <label for="topic-filter">Research area</label>
+      <select id="topic-filter">
+        <option value="all">All research</option>
+        {research.map((area) => (
+          <option value={area.id}>{area.shortTitle}</option>
+        ))}
+        {publications.some((paper) => paper.topics.length === 0) && (
+          <option value="other">Other publications</option>
+        )}
+      </select>
+    </div>
+    <p class="result-count visually-hidden" role="status" aria-live="polite">
+      {publications.length} publications
+    </p>
+  </form>
+  <div id="publication-list">
+    {years.map((year) => (
+      <section class="publication-year" data-year-group>
+        <h2>{year}</h2>
+        <div>
+          {publications
+            .filter((p) => publicationGroupYear(p) === year)
+            .map((p) => (
+              <PublicationEntry publication={p} />
+            ))}
+        </div>
+      </section>
+    ))}
+  </div>
+  <div class="empty-state" id="no-results" hidden>
+    <h2>No matching publications</h2>
+    <p>Try another title, author, or research area.</p>
+    <button class="button" type="button" id="reset-filters">
+      Clear filters
+    </button>
+  </div>
+</Layout>
+<script>
+  import { matchesPublication } from '../lib/publication-filter.mjs';
+  const form = document.querySelector<HTMLFormElement>('.publication-filters');
+  const search = document.querySelector<HTMLInputElement>('#paper-search');
+  const topic = document.querySelector<HTMLSelectElement>('#topic-filter');
+  const entries = [...document.querySelectorAll<HTMLElement>('[data-publication]')];
+  const count = document.querySelector<HTMLElement>('.result-count');
+  const empty = document.querySelector<HTMLElement>('#no-results');
+  if (form && search && topic && count && empty) {
+    form.hidden = false;
+    const update = () => {
+      let visible = 0;
+      entries.forEach((entry) => {
+        const match = matchesPublication(
+          entry.dataset.search ?? '',
+          entry.dataset.topics ?? '',
+          search.value,
+          topic.value,
+        );
+        entry.hidden = !match;
+        if (match) visible++;
+      });
+      document.querySelectorAll<HTMLElement>('[data-year-group]').forEach((group) => {
+        group.hidden = !group.querySelector('[data-publication]:not([hidden])');
+      });
+      count.textContent = `${visible} publication${visible === 1 ? '' : 's'}`;
+      empty.hidden = visible !== 0;
+    };
+    form.addEventListener('submit', (event) => event.preventDefault());
+    search.addEventListener('input', update);
+    topic.addEventListener('change', update);
+    document.querySelector('#reset-filters')?.addEventListener('click', () => {
+      search.value = '';
+      topic.value = 'all';
+      update();
+      search.focus();
+    });
+  }
+</script>

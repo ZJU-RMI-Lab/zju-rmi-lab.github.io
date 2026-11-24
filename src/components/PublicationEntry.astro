@@ -1,0 +1,152 @@
+---
+import type { Publication } from '../data/types';
+import { withBase } from '../lib/paths';
+import ResourceIcon from './ResourceIcon.astro';
+import { publicationGroupYear } from '../lib/publication-order.mjs';
+interface Props {
+  publication: Publication;
+  anchorId?: string;
+}
+const { publication: p, anchorId = Astro.props.publication.id } = Astro.props;
+const searchable = [
+  p.title,
+  ...p.authors,
+  p.venue,
+  p.year,
+  publicationGroupYear(p),
+  ...(p.keywords ?? []),
+].join(' ');
+const citationId = `${anchorId}-citation`;
+const ImageWrapper = p.paper ? 'a' : 'div';
+---
+
+<article
+  class:list={['publication', { 'publication-no-image': !p.image }]}
+  id={anchorId}
+  data-publication
+  data-publication-id={p.id}
+  data-search={searchable}
+  data-topics={p.topics.length ? p.topics.join(' ') : 'other'}
+>
+  <div class="publication-main">
+    {p.image && (
+      <ImageWrapper
+        class="publication-image"
+        href={p.paper}
+        tabindex={p.paper ? -1 : undefined}
+        aria-hidden="true"
+      >
+        <img
+          src={withBase(p.image)}
+          alt=""
+          width={p.imageWidth}
+          height={p.imageHeight}
+          loading="lazy"
+        />
+      </ImageWrapper>
+    )}
+    <div class="publication-body">
+      <h3>{p.paper ? <a href={p.paper}>{p.title}</a> : p.title}</h3>
+      <p class="publication-authors">{p.authors.join(', ')}</p>
+      <p class="publication-venue">
+        {p.venue}, {p.year}
+        {p.status === 'editorial' ? ' (Editorial)' : ''}
+        {p.status === 'template' ? ' (Template)' : ''}
+      </p>
+      <div class="publication-links">
+        {p.paper ? (
+          <a href={p.paper}>
+            <ResourceIcon name="paper" />
+            Paper
+          </a>
+        ) : (
+          p.status === 'template' && (
+            <span class="publication-link-placeholder" aria-disabled="true">
+              <ResourceIcon name="paper" /> Paper
+            </span>
+          )
+        )}
+        {p.status === 'template' && !p.video && (
+          <span class="publication-link-placeholder" aria-disabled="true">
+            <ResourceIcon name="video" /> Video
+          </span>
+        )}
+        {p.status === 'template' && !p.code && (
+          <span class="publication-link-placeholder" aria-disabled="true">
+            <ResourceIcon name="github" /> Code
+          </span>
+        )}
+        {p.video && (
+          <a href={p.video}>
+            <ResourceIcon name="video" />
+            Video
+          </a>
+        )}
+        {p.code && (
+          <a href={p.code}>
+            <ResourceIcon name="github" />
+            Code
+          </a>
+        )}
+        {p.project && (
+          <a href={p.project}>
+            <ResourceIcon name="website" />
+            Project page
+          </a>
+        )}
+        <button
+          type="button"
+          class="citation-toggle"
+          aria-expanded="false"
+          aria-controls={citationId}
+          hidden
+        >
+          <ResourceIcon name="cite" />
+          Cite
+        </button>
+      </div>
+      <p class="publication-summary">{p.summary}</p>
+    </div>
+  </div>
+  <details class="citation" id={citationId}>
+    <summary>
+      <ResourceIcon name="cite" /> Cite
+    </summary>
+    <div class="citation-content">
+      <pre><code>{p.citation}</code></pre>
+      <button type="button" class="copy-citation" hidden>
+        Copy BibTeX
+      </button>
+      <span class="copy-status" role="status"></span>
+    </div>
+  </details>
+</article>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.citation-toggle').forEach((button) => {
+    const details = document.getElementById(
+      button.getAttribute('aria-controls') ?? '',
+    ) as HTMLDetailsElement | null;
+    const summary = details?.querySelector('summary');
+    if (!details || !summary) return;
+    button.hidden = false;
+    summary.hidden = true;
+    button.addEventListener('click', () => {
+      details.open = !details.open;
+      button.setAttribute('aria-expanded', String(details.open));
+    });
+  });
+  document.querySelectorAll<HTMLButtonElement>('.copy-citation').forEach((button) => {
+    button.hidden = false;
+    button.addEventListener('click', async () => {
+      const citation = button.parentElement?.querySelector('code')?.textContent ?? '';
+      const status = button.parentElement?.querySelector('.copy-status');
+      try {
+        await navigator.clipboard.writeText(citation);
+        if (status) status.textContent = 'Copied';
+      } catch {
+        if (status) status.textContent = 'Select the text above to copy.';
+      }
+    });
+  });
+</script>

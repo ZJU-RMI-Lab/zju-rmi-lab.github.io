@@ -1,0 +1,50 @@
+---
+import { site } from '../data/site';
+import { withBase } from '../lib/paths';
+import SocialIcon from './SocialIcon.astro';
+---
+
+<footer class="site-footer container">
+  <div class="footer-content">
+    <div class="footer-brands" aria-label="University and lab">
+      <a class="footer-brand" href="https://www.zju.edu.cn/" aria-label="Zhejiang University">
+        <img
+          class="footer-university-logo"
+          src={withBase('/images/brand/zhejiang-university.png')}
+          alt="Zhejiang University"
+          width="318"
+          height="253"
+        />
+      </a>
+      <a class="footer-brand" href={withBase('/')} aria-label={`${site.name} home`}>
+        <img
+          class="footer-lab-logo"
+          src={withBase('/images/brand/rmi-lab.svg')}
+          alt={site.name}
+          width="458"
+          height="184"
+        />
+      </a>
+    </div>
+    <div class="social-links" aria-label="Lab social channels">
+      <a class="social-link" href={site.youtube} aria-label="RMI Lab on YouTube" title="YouTube">
+        <SocialIcon name="youtube" />
+      </a>
+      {site.github ? (
+        <a class="social-link" href={site.github} aria-label="RMI Lab on GitHub" title="GitHub">
+          <SocialIcon name="github" />
+        </a>
+      ) : (
+        <span
+          class="social-link social-placeholder"
+          role="img"
+          aria-label="GitHub link to be added"
+          aria-disabled="true"
+          title="GitHub link to be added"
+        >
+          <SocialIcon name="github" />
+        </span>
+      )}
+    </div>
+  </div>
+</footer>

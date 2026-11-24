@@ -1,0 +1,40 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ResearchPhotos from '../components/ResearchPhotos.astro';
+import VideoCover from '../components/VideoCover.astro';
+import { site } from '../data/site';
+import { homeCover, news } from '../data/home';
+import { withBase } from '../lib/paths';
+---
+
+<Layout>
+  <div class="home-cover">{homeCover.mode === 'video' ? <VideoCover /> : <ResearchPhotos />}</div>
+  <div class="home-content">
+    <section class="lab-introduction" aria-label="About the lab">
+      <h1>{site.name}</h1>
+      <p>
+        We are a robotics research group in the {site.school} at {site.university}, led by{' '}
+        <a href={withBase('/people/')}>Qiuguo Zhu</a> and <a href={withBase('/people/')}>Jun Wu</a>.
+      </p>
+      <p>
+        Our research brings together robot perception, learning, and control, with a focus on legged
+        locomotion and autonomous navigation. We develop and test these methods on physical robots.
+      </p>
+      <p>
+        Read about our <a href={withBase('/research/')}>research</a> or browse our{' '}
+        <a href={withBase('/publications/')}>publications</a>.
+      </p>
+    </section>
+    <section class="news-section" aria-labelledby="news-heading">
+      <h2 id="news-heading">News</h2>
+      <ul class="news-list">
+        {news.map((item) => (
+          <li>
+            <time datetime={item.date}>{item.displayDate}</time>
+            <a href={item.href}>{item.text}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</Layout>

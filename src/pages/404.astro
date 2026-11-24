@@ -1,0 +1,15 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { withBase } from '../lib/paths';
+---
+
+<Layout title="Page not found">
+  <section class="not-found">
+    <p class="institution">404</p>
+    <h1>Page not found.</h1>
+    <p>This address may have changed.</p>
+    <a class="button" href={withBase('/')}>
+      Back to home
+    </a>
+  </section>
+</Layout>
