@@ -19,7 +19,9 @@
 ## 标志与字体
 
 - 浙江大学标志：浙江大学官方校标页面 https://www.zju.edu.cn/514/listm.htm 。
-- RMI实验室字母标志：用户选定的RMI V4概念稿占位版本。
+- RMI实验室标志：用户于2026-11-26提供的 `logo-06.png`，原件保存在 `public/images/brand/logo-06.png`。
+- `public/images/brand/rmi-lab.svg` 内嵌原PNG，通过 viewBox（19, 0, 5372, 2140）裁去外围空白，保留原始像素、配色、文字与透明度；这不是重新绘制的矢量标志。页头、页脚和favicon共用该文件。
+- `public/images/brand/zhejiang-university.svg` 同样仅裁去原校标外围空白（67, 44, 175, 175），用于页脚两枚标志实际可见边缘的对齐。
 - Source Sans 3、Source Serif 4通过对应Fontsource包本地加载，许可证随包提供。
 
 People的导师照片沿用官方个人主页资料；示例学生与校友均有占位标记。素材原有权利与署名要求不因进入本仓库而改变。

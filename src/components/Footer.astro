@@ -1,6 +1,7 @@
 ---
 import { site } from '../data/site';
 import { withBase } from '../lib/paths';
+import LabLogo from './LabLogo.astro';
 import SocialIcon from './SocialIcon.astro';
 ---
 
@@ -10,20 +11,14 @@ import SocialIcon from './SocialIcon.astro';
       <a class="footer-brand" href="https://www.zju.edu.cn/" aria-label="Zhejiang University">
         <img
           class="footer-university-logo"
-          src={withBase('/images/brand/zhejiang-university.png')}
+          src={withBase('/images/brand/zhejiang-university.svg')}
           alt="Zhejiang University"
-          width="318"
-          height="253"
+          width="175"
+          height="175"
         />
       </a>
       <a class="footer-brand" href={withBase('/')} aria-label={`${site.name} home`}>
-        <img
-          class="footer-lab-logo"
-          src={withBase('/images/brand/rmi-lab.svg')}
-          alt={site.name}
-          width="458"
-          height="184"
-        />
+        <LabLogo class="footer-lab-logo" />
       </a>
     </div>
     <div class="social-links" aria-label="Lab social channels">

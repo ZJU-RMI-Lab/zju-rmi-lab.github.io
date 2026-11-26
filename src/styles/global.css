@@ -166,18 +166,20 @@ main {
   border-bottom: 1px solid #e9edf0;
 }
 .header-inner {
-  min-height: 82px;
+  min-height: 100px;
+  padding-block: 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 36px;
 }
 .wordmark {
-  font-family: var(--serif);
-  font-size: 1.875rem;
-  font-weight: 650;
-  line-height: 1;
-  white-space: nowrap;
+  display: block;
+  flex: none;
+}
+.header-lab-logo {
+  width: auto;
+  height: 64px;
 }
 .wordmark:hover {
   text-decoration: none;
@@ -236,20 +238,20 @@ main {
   align-items: center;
 }
 .footer-content {
-  gap: 36px;
+  gap: 72px;
 }
 .footer-brands {
-  gap: 16px;
+  --footer-logo-height: 46px;
+  gap: 48px;
 }
 .footer-brand {
   display: block;
   flex-shrink: 0;
 }
-.footer-university-logo {
-  width: 84px;
-}
+.footer-university-logo,
 .footer-lab-logo {
-  width: 100px;
+  width: auto;
+  height: var(--footer-logo-height);
 }
 .social-links {
   gap: 18px;
@@ -846,13 +848,13 @@ main {
 }
 @media (max-width: 760px) {
   .header-inner {
-    min-height: 74px;
+    min-height: 84px;
     flex-wrap: wrap;
     gap: 0;
     padding-block: 16px;
   }
-  .wordmark {
-    font-size: 1.625rem;
+  .header-lab-logo {
+    height: 52px;
   }
   .menu-toggle {
     display: block;
@@ -923,16 +925,11 @@ main {
 }
 @media (max-width: 540px) {
   .footer-content {
-    gap: 24px;
+    gap: 40px;
   }
   .footer-brands {
-    gap: 12px;
-  }
-  .footer-university-logo {
-    width: 68px;
-  }
-  .footer-lab-logo {
-    width: 80px;
+    --footer-logo-height: 38px;
+    gap: 24px;
   }
   .social-links {
     gap: 8px;
@@ -994,5 +991,15 @@ main {
   *::after {
     scroll-behavior: auto !important;
     transition: none !important;
+  }
+}
+
+/* Keep the footer on one centered row on narrow phones. */
+@media (max-width: 360px) {
+  .footer-content {
+    gap: 28px;
+  }
+  .footer-brands {
+    gap: 20px;
   }
 }

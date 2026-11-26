@@ -1,0 +1,14 @@
+---
+import { site } from '../data/site';
+import { withBase } from '../lib/paths';
+interface Props { class?: string; }
+const { class: className } = Astro.props;
+---
+
+<img
+  class={className}
+  src={withBase('/images/brand/rmi-lab.svg')}
+  alt={site.name}
+  width="5372"
+  height="2140"
+/>

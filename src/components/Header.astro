@@ -1,4 +1,5 @@
 ---
+import LabLogo from './LabLogo.astro';
 import { navigation } from '../data/site';
 import { withBase } from '../lib/paths';
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
@@ -7,7 +8,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 <header class="site-header">
   <div class="container header-inner">
     <a class="wordmark" href={withBase('/')} aria-label="RMI Lab home">
-      RMI Lab
+      <LabLogo class="header-lab-logo" />
     </a>
     <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav" hidden>
       Menu
