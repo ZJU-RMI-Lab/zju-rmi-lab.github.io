@@ -78,3 +78,8 @@ export interface AlumniGroup {
   title: string;
   members: Alumnus[];
 }
+
+export interface LabAlumniCohort {
+  id: string;
+  members: string[];
+}

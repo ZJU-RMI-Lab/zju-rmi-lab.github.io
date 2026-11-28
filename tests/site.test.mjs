@@ -7,6 +7,7 @@ import { publications } from '../src/data/publications.ts';
 import { research } from '../src/data/research.ts';
 import { media } from '../src/data/media.ts';
 import { homeCover, news } from '../src/data/home.ts';
+import { peopleGroups, alumniCohorts } from '../src/data/people.ts';
 import { newestPublicationFirst } from '../src/lib/publication-order.mjs';
 
 const dist = resolve('dist');
@@ -232,4 +233,16 @@ test('removed Contact page is absent from output and navigation', () => {
   for (const page of pages) {
     assert.doesNotMatch(readFileSync(htmlPath(page), 'utf8'), /href="[^"]*\/contact\/"/);
   }
+});
+
+test('lab alumni keep the five board columns and do not repeat current members', () => {
+  assert.equal(alumniCohorts.length, 5);
+  const names = alumniCohorts.flatMap((cohort) => cohort.members);
+  assert.ok(names.length > 0);
+  assert.equal(new Set(names).size, names.length);
+  const current = new Set(
+    peopleGroups.flatMap((group) => group.members.map((person) => person.name)),
+  );
+  for (const name of names)
+    assert.ok(!current.has(name), `Current member listed as alumnus: ${name}`);
 });

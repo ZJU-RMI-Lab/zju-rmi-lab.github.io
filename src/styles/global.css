@@ -707,32 +707,25 @@ main {
   font-size: 0.9375rem;
   color: var(--muted);
 }
-.alumni-group + .alumni-group {
-  margin-top: 24px;
-}
-.alumni-group h3 {
-  margin-bottom: 8px;
-  font-family: var(--serif);
-  font-size: 1.1875rem;
-}
-.alumni-list li {
-  display: grid;
-  grid-template-columns: 190px minmax(0, 1fr);
-  align-items: baseline;
-  gap: 16px;
-  padding-block: 5px;
-  font-size: 1rem;
-}
-.alumni-details {
-  min-width: 0;
-}
-.alumni-name {
-  font-weight: 600;
-}
-.alumni-destination {
-  display: block;
+.alumni-intro {
+  max-width: 75ch;
+  margin-bottom: 24px;
   color: var(--muted);
-  overflow-wrap: anywhere;
+}
+.alumni-cohorts {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 32px 24px;
+  align-items: start;
+}
+.alumni-roster {
+  display: grid;
+  gap: 3px;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+.alumni-roster li {
+  padding-block: 1px;
 }
 
 /* Videos keep their actual experimental posters; the player is loaded on demand. */
@@ -845,6 +838,9 @@ main {
   .header-inner nav {
     gap: 22px;
   }
+  .alumni-cohorts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 @media (max-width: 760px) {
   .header-inner {
@@ -934,9 +930,9 @@ main {
   .social-links {
     gap: 8px;
   }
-  .alumni-list li {
-    grid-template-columns: 96px minmax(0, 1fr);
-    gap: 12px;
+  .alumni-cohorts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 18px;
   }
   .photo-pair {
     grid-template-columns: 1fr;
@@ -1001,5 +997,8 @@ main {
   }
   .footer-brands {
     gap: 20px;
+  }
+  .alumni-cohorts {
+    grid-template-columns: 1fr;
   }
 }

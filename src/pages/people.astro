@@ -2,10 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import PageHeading from '../components/PageHeading.astro';
 import PersonCard from '../components/PersonCard.astro';
-import { faculty, peopleGroups, alumniGroups } from '../data/people';
-const hasExamples = [...peopleGroups, ...alumniGroups].some((group) =>
-  group.members.some((person) => person.isPlaceholder),
-);
+import { faculty, peopleGroups, alumniCohorts } from '../data/people';
+const hasAlumni = alumniCohorts.length > 0;
 ---
 
 <Layout title="People">
@@ -18,11 +16,6 @@ const hasExamples = [...peopleGroups, ...alumniGroups].some((group) =>
       ))}
     </div>
   </section>
-  {hasExamples && (
-    <p class="sample-members-note">
-      The member entries below are fictional examples for layout review.
-    </p>
-  )}
   {peopleGroups.map(
     (group) =>
       group.members.length > 0 && (
@@ -39,31 +32,23 @@ const hasExamples = [...peopleGroups, ...alumniGroups].some((group) =>
         </section>
       ),
   )}
-  <section class="people-section alumni-section" id="alumni" aria-labelledby="alumni-heading">
-    <h2 id="alumni-heading">Alumni</h2>
-    {alumniGroups.map((group) => (
-      <section class="alumni-group" aria-labelledby={group.id}>
-        <h3 id={group.id}>{group.title}</h3>
-        <ul class="alumni-list">
-          {group.members.map((person) => (
-            <li data-placeholder={person.isPlaceholder || undefined}>
-              <span class="alumni-name">
-                {person.profile ? <a href={person.profile}>{person.name}</a> : person.name}
-              </span>
-              <div class="alumni-details">
-                <p>
-                  {`was with the lab from ${person.startYear} to ${person.endYear}${
-                    person.degree
-                      ? ` and received a ${person.degree.title} in ${person.degree.year}.`
-                      : '.'
-                  }`}
-                </p>
-                {person.destination && <span class="alumni-destination">{person.destination}</span>}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-    ))}
-  </section>
+  {hasAlumni && (
+    <section class="people-section alumni-section" id="alumni" aria-labelledby="alumni-heading">
+      <h2 id="alumni-heading">Lab Alumni</h2>
+      <p class="alumni-intro">
+        Former members of the laboratory, ordered left to right and top to bottom.
+      </p>
+      <div class="alumni-cohorts">
+        {alumniCohorts.map((cohort) => (
+          <section class="alumni-cohort">
+            <ul class="alumni-roster">
+              {cohort.members.map((name) => (
+                <li>{name}</li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+    </section>
+  )}
 </Layout>
